@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Costbook</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style type="text/tailwindcss">
+    @theme {
+      --color-accent: #1f5f4a;
+      --color-accent-soft: #e8f0ec;
+      --color-ink: #1a1a1a;
+      --color-ink-2: #474747;
+      --color-ink-3: #666666;
+      --color-rule: #e4e4e1;
+      --color-rule-2: #cdcdc9;
+      --color-canvas: #f3f3f1;
+      --color-est: #874a08;
+      --color-est-bg: #fdf5e6;
+      --color-low: #b42318;
+      --color-low-bg: #fdf0ee;
+      --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+    }
+    @layer base {
+      html { -webkit-text-size-adjust: 100%; }
+      body { @apply bg-canvas text-ink text-[16px] leading-[1.5] antialiased font-sans; }
+      ::selection { background: #cfe3d9; color: #10291f; }
+      * { scrollbar-width: thin; scrollbar-color: #c4c4c0 transparent; }
+      input, select { caret-color: var(--color-accent); }
+      h1 { @apply text-[26px] leading-tight font-semibold tracking-[-0.01em]; }
+      h2 { @apply text-[18px] font-semibold mt-8 mb-3; }
+      a { @apply text-accent underline-offset-[3px] decoration-1 hover:underline; }
+      table { @apply w-full border-collapse; }
+      th { @apply text-left font-medium text-ink-3 text-[13px] bg-[#fafaf9] border-b border-rule-2 px-3 py-2 whitespace-nowrap; }
+      td { @apply border-b border-rule px-3 py-2 align-middle; }
+      tbody tr:last-child td { @apply border-b-0; }
+      input, select { @apply border border-rule-2 rounded-[6px] px-2.5 h-10 bg-white min-w-0 text-ink; }
+      input::placeholder { @apply text-ink-3; }
+      input[type=file] { @apply h-auto py-1; }
+      input[type=checkbox], input[type=radio] { @apply h-4 w-4 p-0 border-0 shrink-0; accent-color: var(--color-accent); }
+      input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible, summary:focus-visible {
+        @apply outline-2 outline-accent outline-offset-1;
+      }
+      label { @apply text-[14px] text-ink-2; }
+      nav a { @apply h-full flex items-center border-b-2 border-transparent text-ink-2 hover:text-ink hover:no-underline; }
+      nav a[aria-current=page] { @apply border-accent text-ink font-medium; }
+      code { @apply font-mono text-[12px] bg-white border border-rule px-1 rounded-[2px]; }
+    }
+    @layer components {
+      .btn { @apply inline-flex items-center justify-center gap-2 h-10 border border-rule-2 rounded-[6px] px-4 font-medium bg-white text-ink hover:bg-[#f7f7f6] hover:border-[#b5b5b1] whitespace-nowrap no-underline hover:no-underline disabled:opacity-45 disabled:pointer-events-none cursor-pointer; }
+      .btn-primary { @apply border-accent bg-accent text-white hover:bg-[#184d3c] hover:border-[#184d3c]; }
+      .btn-quiet { @apply border-transparent bg-transparent text-ink-2 hover:bg-black/5 hover:border-transparent; }
+      .btn-sm { @apply h-8 px-2.5 text-[14px]; }
+      .btn-lg { @apply h-12 px-5 text-[17px] rounded-[8px]; }
+      .icon { @apply w-4 h-4 shrink-0; }
+      .icon-lg { @apply w-5 h-5; }
+      .num { @apply font-mono tabular-nums text-right whitespace-nowrap; }
+      .badge { @apply inline-flex items-center gap-1 text-[13px] leading-[22px] px-2 rounded-[3px] border whitespace-nowrap font-medium; }
+      .tag { @apply inline-flex items-center text-[13px] leading-[22px] px-2 rounded-[3px] border whitespace-nowrap font-medium border-rule-2 text-ink-2 bg-white; }
+      .flag { @apply text-est bg-est-bg border-[#efd9b0]; }
+      .bad { @apply text-low bg-low-bg border-[#f3c9c3]; }
+      .muted { @apply text-ink-3; }
+      .field { @apply flex flex-col gap-1; }
+      .panel { @apply bg-white border border-rule-2 rounded-[10px]; }
+      .scroll { @apply bg-white border border-rule-2 rounded-[10px] overflow-x-auto max-sm:rounded-none max-sm:border-x-0 max-sm:-mx-3; }
+      .notice { @apply text-[15px] px-4 py-3 border rounded-[8px]; }
+      /* Spreadsheet cell: reads as plain text until hovered or focused. */
+      .cell { @apply w-full border-transparent bg-transparent hover:border-rule-2 focus:border-accent focus:bg-white; }
+    }
+  </style>
+</head>
+<body>
+  <header class="bg-white border-b border-rule-2">
+    <nav class="max-w-6xl mx-auto px-3 sm:px-5 flex items-center gap-5 sm:gap-7 h-14 overflow-x-auto" aria-label="Main">
+      <span class="font-semibold text-[18px] tracking-[-0.01em] mr-1">Costbook</span>
+      <a href="#/home" data-nav="home">Home</a>
+      <a href="#/recipes" data-nav="recipe">Recipes</a>
+      <a href="#/ingredients" data-nav="ingredient">Ingredients</a>
+      <a href="#/receipts" data-nav="receipt">Receipts</a>
+      <a href="#/settings" data-nav="settings">Settings</a>
+    </nav>
+  </header>
+  <div id="notice" class="max-w-6xl mx-auto px-3 sm:px-5"></div>
+  <div id="msg" role="status" aria-live="polite" class="max-w-6xl mx-auto px-3 sm:px-5"></div>
+  <main id="main" class="max-w-6xl mx-auto px-3 sm:px-5 py-5"></main>
+  <script src="app.js"></script>
+</body>
+</html>
